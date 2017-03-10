@@ -10,12 +10,14 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      component: Hello
+      component: Hello,
+      meta: {requiresAuth: false}
     },
     {
       path: '/profil',
       name: 'Profil',
-      component: Profil
+      component: Profil,
+      meta: {requiresAuth: true}
     }
   ]
 })

@@ -91,7 +91,7 @@ app.get('/profile',
   function(req, res){
     res.render('profile', { user: req.user });
   });
-app.get('/login/me',
+app.get('/me',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
     res.json({ user: req.user });

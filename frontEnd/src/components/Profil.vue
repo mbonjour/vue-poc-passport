@@ -13,7 +13,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('/login/me').then((response) => {
+    this.$http.get('/me').then((response) => {
       this.user = response.data.user
       console.dir(response)
     })
