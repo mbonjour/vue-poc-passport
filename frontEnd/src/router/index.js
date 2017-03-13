@@ -10,8 +10,7 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      component: Hello,
-      meta: {requiresAuth: false}
+      component: Hello
     },
     {
       path: '/profil',

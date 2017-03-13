@@ -16,7 +16,7 @@ passport.use(new Strategy({
     clientSecret: 'aad8636ffe0bd503a973774dbf5d130d',
     callbackURL: 'http://localhost:3000/login/facebook/return'
   },
-  function(accessToken, refreshToken, profile, cb) {
+  function (accessToken, refreshToken, profile, cb) {
     // In this example, the user's Facebook profile is supplied as the user
     // record.  In a production-quality application, the Facebook profile should
     // be associated with a user record in the application's database, which
@@ -35,11 +35,11 @@ passport.use(new Strategy({
 // from the database when deserializing.  However, due to the fact that this
 // example does not have a database, the complete Facebook profile is serialized
 // and deserialized.
-passport.serializeUser(function(user, cb) {
+passport.serializeUser(function (user, cb) {
   cb(null, user);
 });
 
-passport.deserializeUser(function(obj, cb) {
+passport.deserializeUser(function (obj, cb) {
   cb(null, obj);
 });
 
@@ -55,8 +55,14 @@ app.set('view engine', 'ejs');
 // logging, parsing, and session handling.
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(require('body-parser').urlencoded({
+  extended: true
+}));
+app.use(require('express-session')({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(express.static(path.join(__dirname, 'client')))
 
 // Initialize Passport and restore authentication state, if any, from the
@@ -67,12 +73,14 @@ app.use(passport.session());
 
 // Define routes.
 app.get('/',
-  function(req, res) {
-    res.render('home', { user: req.user });
+  function (req, res) {
+    res.render('home', {
+      user: req.user
+    });
   });
 
 app.get('/login',
-  function(req, res){
+  function (req, res) {
     res.render('login');
   });
 
@@ -80,21 +88,25 @@ app.get('/login/facebook',
   passport.authenticate('facebook')
 );
 
-app.get('/login/facebook/return', 
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function(req, res) {
+app.get('/login/facebook/return',
+  passport.authenticate('facebook', {
+    failureRedirect: '/login'
+  }),
+  function (req, res) {
     res.redirect('/#/profil');
   });
 
-app.get('/profile',
-  require('connect-ensure-login').ensureLoggedIn(),
-  function(req, res){
-    res.render('profile', { user: req.user });
-  });
+// app.get('/profile',
+//   require('connect-ensure-login').ensureLoggedIn(),
+//   function(req, res){
+//     res.render('profile', { user: req.user });
+//   });
 app.get('/me',
   require('connect-ensure-login').ensureLoggedIn(),
-  function(req, res){
-    res.json({ user: req.user });
+  function (req, res) {
+    res.json({
+      user: req.user
+    });
   });
 
 

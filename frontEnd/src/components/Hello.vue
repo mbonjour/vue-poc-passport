@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
-    <a href="/login/facebook">Prout</a>
+    <a href="/login/facebook">Prout</a></br>
+    <router-link to="/profil">profil</router-link>
   </div>
 </template>
 

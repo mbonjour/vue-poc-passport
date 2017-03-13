@@ -1,6 +1,6 @@
 <template>
   <div class="profil">
-    <p>{{user.displayName}}</p>
+    <p>{{ user.displayName }}</p>
   </div>
 </template>
 
@@ -15,7 +15,6 @@ export default {
   created () {
     this.$http.get('/me').then((response) => {
       this.user = response.data.user
-      console.dir(response)
     })
   }
 }

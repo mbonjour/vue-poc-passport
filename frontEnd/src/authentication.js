@@ -1,9 +1,13 @@
-import axios from 'axios'
-
 export default {
-  loggedIn () {
+  loggedIn (axios, next) {
     axios.get('/me').then((response) => {
-      return response.status === 200
+      if (response.data.user) {
+        console.log('returned true to loggedIn')
+        next(true)
+      } else {
+        console.log('returned false to loggedIn')
+        next(false)
+      }
     })
   }
 }
