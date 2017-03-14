@@ -10,26 +10,24 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  auth.loggedIn(axios, (logged) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-      // this route requires auth, check if logged in
-      // if not, redirect to login page.
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    auth.loggedIn(axios, (logged) => {
       if (!logged) {
         console.log('pas log ' + logged)
-        next({
-          path: '/',
-          query: {
-            redirect: to.fullPath
-          }
+        // config header pour que facebook l'autorise !
+        axios.get('/login/facebook').then((response) => {
+          next()
         })
       } else {
         console.log('log ' + logged)
         next()
       }
-    } else {
-      next() // make sure to always call next()!
-    }
-  })
+    })
+  } else {
+    next() // make sure to always call next()!
+  }
 })
 /* eslint-disable no-new */
 new Vue({

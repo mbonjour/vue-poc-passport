@@ -7,7 +7,11 @@ To install this example on your computer, clone the repository and install
 dependencies.
 
 ```bash
-$ npm install
+$ npm i
+$ cd frontEnd
+$ npm i
+$ npm run build
+$ cd ..
 $ node server.js
 ```
 
