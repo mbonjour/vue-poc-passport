@@ -12,9 +12,13 @@ $ cd frontEnd
 $ npm i
 $ npm run build
 $ cd ..
-$ node server.js
 ```
 
+###Change the name server-sample.js into server.js and put in your clientID et clientSecret for your facebook app
+
+```bash
+$ node server.js
+```
 
 Open a web browser and navigate to [http://localhost:3000/](http://localhost:3000/)
 to see the example in action.

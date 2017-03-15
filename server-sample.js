@@ -12,8 +12,8 @@ var Strategy = require('passport-facebook').Strategy
 // with a user object, which will be set at `req.user` in route handlers after
 // authentication.
 passport.use(new Strategy({
-    clientID: 'clientId',
-    clientSecret: '',
+    clientID: 'client ID in numbers',
+    clientSecret: 'clientSecret',
     callbackURL: 'http://localhost:3000/login/facebook/return'
   },
   function (accessToken, refreshToken, profile, cb) {
@@ -43,7 +43,6 @@ passport.deserializeUser(function (obj, cb) {
   cb(null, obj)
 })
 
-
 // Create a new Express application.
 var app = express()
 
@@ -72,18 +71,13 @@ app.get('/login/facebook',
 
 app.get('/login/facebook/return',
   passport.authenticate('facebook', {
-    failureRedirect: '/login'
-  }),
-  function (req, res) {
-    if (req.session.returnTo) {
-      // voir vu que ça peut être appeler depuis fct beforeEach router Vue si l'on peut continuer
-      res.redirect(req.session.returnTo)
-    } else {
-      res.redirect('/#/')
-    }
+    failureRedirect: '/#/',
+    successRedirect: '/#/profil'
   })
+)
 
 app.get('/me',
+ require('connect-ensure-login').ensureLoggedIn('/login/facebook'),
   function (req, res) {
     res.json({
       user: req.user

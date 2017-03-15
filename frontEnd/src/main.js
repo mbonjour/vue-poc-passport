@@ -11,22 +11,18 @@ Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
     auth.loggedIn(axios, (logged) => {
       if (!logged) {
-        console.log('pas log ' + logged)
-        // config header pour que facebook l'autorise !
-        axios.get('/login/facebook').then((response) => {
-          next()
+        next({
+          path: '/',
+          query: { redirect: to.fullPath }
         })
       } else {
-        console.log('log ' + logged)
         next()
       }
     })
   } else {
-    next() // make sure to always call next()!
+    next()
   }
 })
 /* eslint-disable no-new */
@@ -34,7 +30,5 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: {
-    App
-  }
+  components: { App }
 })

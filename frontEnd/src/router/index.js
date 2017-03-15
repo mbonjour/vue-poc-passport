@@ -16,7 +16,7 @@ export default new Router({
       path: '/profil',
       name: 'Profil',
       component: Profil,
-      meta: {requiresAuth: true}
+      meta: { requiresAuth: true }
     }
   ]
 })

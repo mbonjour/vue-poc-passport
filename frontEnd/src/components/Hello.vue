@@ -1,18 +1,13 @@
 <template>
   <div class="hello">
-    <a href="/login/facebook">Prout</a></br>
-    <router-link to="/profil">profil</router-link>
+    <a href="/login/facebook">Login to facebook</a></br>
+    <router-link to="/profil">Profil (secured page)</router-link>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'hello',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
+  name: 'hello'
 }
 </script>
 
