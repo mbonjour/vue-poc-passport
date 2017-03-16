@@ -12,10 +12,10 @@ var Strategy = require('passport-facebook').Strategy
 // with a user object, which will be set at `req.user` in route handlers after
 // authentication.
 passport.use(new Strategy({
-    clientID: 'clientID',
-    clientSecret: 'clientSecret',
-    callbackURL: 'http://localhost:3000/login/facebook/return'
-  },
+  clientID: 'clientID',
+  clientSecret: 'clientSecret',
+  callbackURL: 'http://localhost:3000/login/facebook/return'
+},
   function (accessToken, refreshToken, profile, cb) {
     // In this example, the user's Facebook profile is supplied as the user
     // record.  In a production-quality application, the Facebook profile should
@@ -65,22 +65,35 @@ app.use(express.static(path.join(__dirname, 'client')))
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.get('/login/facebook',
-  passport.authenticate('facebook')
-)
+app.get('/login/facebook/', function (req, res, next) {
+  passport.authenticate(
+    'facebook',
+    { callbackURL: '/login/facebook/return/?url=' + req.query.url }
+  )(req, res, next)
+})
 
-app.get('/login/facebook/return',
-  passport.authenticate('facebook', {
-    failureRedirect: '/#/',
-    successRedirect: '/#/profil'
-  })
-)
+app.get('/login/facebook/return/', function (req, res, next) {
+  passport.authenticate(
+    'facebook',
+    {
+      callbackURL: "/login/facebook/return/?url=" + req.query.url,
+      successRedirect: "/#/" + decodeURI(req.query.url),
+      failureRedirect: "/#/"
+    }
+  )(req, res, next)
+})
 
 app.get('/me',
   function (req, res) {
-    res.json({
-      user: req.user
-    })
+    if (!req.user) {
+      res.json({ logged: false })
+    }
+    else {
+      res.json({
+        logged: true,
+        user: req.user
+      })
+    }
   })
 
 app.listen(3000)

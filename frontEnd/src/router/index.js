@@ -1,22 +1,30 @@
+import axios from 'axios'
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
-import Profil from '@/components/Profil'
-
+import routes from './routes'
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Hello',
-      component: Hello
-    },
-    {
-      path: '/profil',
-      name: 'Profil',
-      component: Profil,
-      meta: { requiresAuth: true }
-    }
-  ]
+let router = new Router(routes)
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    loggedIn((logged) => {
+      console.log(to)
+      if (!logged) {
+        window.location.replace('/login/facebook?url=' + to.fullPath.substring(1))
+      } else {
+        next()
+      }
+    })
+  } else {
+    next()
+  }
 })
+
+let loggedIn = (next) => {
+  axios.get('/me').then((response) => {
+    next(response.data.logged)
+  })
+}
+
+export default router

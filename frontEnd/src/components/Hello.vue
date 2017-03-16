@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <a href="/login/facebook">Login to facebook</a></br>
+    <a href="/login/facebook?url=success">Login to facebook</a></br>
     <router-link to="/profil">Profil (secured page)</router-link>
   </div>
 </template>
