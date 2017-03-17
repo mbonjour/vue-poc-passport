@@ -11,7 +11,7 @@ router.beforeEach((to, from, next) => {
     loggedIn((logged) => {
       console.log(to)
       if (!logged) {
-        window.location.replace('/login/facebook?url=' + to.fullPath.substring(1))
+        window.location.replace('/login/facebook?url=' + to.fullPath)
       } else {
         next()
       }
