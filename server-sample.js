@@ -3,7 +3,6 @@ var path = require('path')
 var passport = require('passport')
 var Strategy = require('passport-facebook').Strategy
 
-
 // Configure the Facebook strategy for use by Passport.
 //
 // OAuth 2.0-based strategies require a `verify` function which receives the
@@ -65,23 +64,18 @@ app.use(express.static(path.join(__dirname, 'client')))
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.get('/login/facebook/', function (req, res, next) {
-  passport.authenticate(
-    'facebook',
-    { callbackURL: '/login/facebook/return/?url=' + req.query.url }
-  )(req, res, next)
-})
+app.get('/login/facebook', function(req, res, next) {
+  req.session.url = req.query.url;
+  next();
+}, passport.authenticate('facebook'));
 
-app.get('/login/facebook/return/', function (req, res, next) {
-  passport.authenticate(
-    'facebook',
-    {
-      callbackURL: "/login/facebook/return/?url=" + req.query.url,
-      successRedirect: "/#/" + decodeURI(req.query.url),
-      failureRedirect: "/#/"
-    }
-  )(req, res, next)
-})
+app.get('/login/facebook/return', passport.authenticate(
+  'facebook',
+  {failureRedirect: '/#/'}
+), function (req, res) {
+  res.redirect('/#' + req.session.url || '/#/');
+  delete req.session.url;
+});
 
 app.get('/me',
   function (req, res) {
